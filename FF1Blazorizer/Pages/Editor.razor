@@ -1,0 +1,110 @@
+﻿@page "/Editor"
+@using System.IO;
+@using FF1Lib;
+@inject IJSRuntime JSRuntime
+@inject Blazored.LocalStorage.ILocalStorageService LocalStorage
+
+<div id="main-content">
+	<aside id="left-column">
+		<div id="mode-selector" class="framed-content">
+			<p>@RomMessage</p>
+			<input type="file" id="fileInput" accept=".nes" @onchange="@OnFileChanged" />
+			<div class="checkbox-cell"></div>
+			<CheckBox UpdateToolTip="@UpdateToolTipID" Id="rememberCheckBox" @bind-Value="RememberRom">Remember ROM</CheckBox>
+			<p>
+				<a class="styled-button">Export</a>
+				<a class="styled-button">Import Sprite</a>
+			</p>
+			<EditForm Model="@editorModel">
+				<InputRadioGroup @bind-Value="editorModel.CurrentMode">
+					<label><InputRadio Value="@EditorMode.Tile" /> Tile Editor</label>
+					<label><InputRadio Value="@EditorMode.Palette" /> Palette Assignment</label>
+					<label><InputRadio Value="@EditorMode.Layout" /> Layout Tiles</label>
+				</InputRadioGroup>
+			</EditForm>
+		</div>
+		<div id="editor-help" class="framed-content">
+			<h3 class="centered">Help</h3>
+			<p>Some text to help the user with how to use the Chaos sprite submitter</p>
+		</div>
+	</aside>
+
+	<main id="right-column">
+		<div id="editor-main" class="framed-content">
+			<h3>Chaos Sprite Editor</h3>
+		</div>
+	</main>
+</div>
+
+@code {
+	[Parameter] public Action<string, MouseEventArgs> UpdateToolTipID { get; set; }
+
+	private enum EditorMode
+	{
+		Tile = 0,
+		Palette,
+		Layout,
+	}
+
+	private class EditorModel
+	{
+		public EditorMode CurrentMode { get; set; } = EditorMode.Tile;
+	}
+
+	private EditorModel editorModel = new EditorModel();
+	private string RomMessage = "Upload Rom:";
+	private bool RememberRom = false;
+	private byte[] _fileData;
+
+	protected override async void OnInitialized()
+	{
+		await LoadLastROM();
+		StateHasChanged();
+	}
+
+	async Task LoadLastROM()
+	{
+		string encoded = await LocalStorage.GetItemAsync<string>("file");
+		RememberRom = encoded != null && encoded.Length > 0;
+		if (RememberRom)
+		{
+			SetFileData(encoded);
+			RomMessage = "Using Remembered ROM.";
+		}
+	}
+
+	async Task OnFileChanged(ChangeEventArgs e)
+	{
+		var encoded = await JSRuntime.InvokeAsync<string>("handleFileSelect", "fileInput");
+		RomMessage = "Using Selected ROM.";
+		SetFileData(encoded);
+
+		if (RememberRom)
+		{
+			await LocalStorage.SetItemAsync("file", encoded);
+		}
+	}
+
+	void SetFileData(string encoded)
+	{
+		_fileData = Convert.FromBase64String(encoded);
+		using (var stream = new MemoryStream(_fileData))
+		{
+			FF1Rom temprom = new FF1Rom(stream);
+			if (temprom.HeaderLength != 16)
+			{
+				RomMessage = "ROM header length is incorrect, try a different ROM";
+				return;
+			}
+			try
+			{
+
+				temprom.AssureSafe();
+			}
+			catch (FF1Lib.FF1Rom.TournamentSafeException)
+			{
+				RomMessage = "Detected ROM hash does not match the expected hash.\nResults may vary.";
+			}
+		}
+	}
+}

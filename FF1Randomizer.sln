@@ -38,9 +38,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "netlify", "netlify", "{4734
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FF1Randomizer", "FF1Randomizer\FF1Randomizer.csproj", "{62534BEA-C1A8-4711-A4E8-F89EAC62655E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FFR.Common", "FFR.Common\FFR.Common.csproj", "{3889F6E5-223F-4357-8235-B1C61EBD665C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FFR.Common", "FFR.Common\FFR.Common.csproj", "{3889F6E5-223F-4357-8235-B1C61EBD665C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FF1Lib", "FF1Lib\FF1Lib.csproj", "{416AE051-B042-41D7-A86C-AA38976D27EC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FF1Lib", "FF1Lib\FF1Lib.csproj", "{416AE051-B042-41D7-A86C-AA38976D27EC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

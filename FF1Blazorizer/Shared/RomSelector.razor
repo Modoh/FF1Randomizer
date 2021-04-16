@@ -1,0 +1,68 @@
+﻿@using System.IO;
+@using FF1Lib;
+@inject IJSRuntime JSRuntime
+@inject Blazored.LocalStorage.ILocalStorageService LocalStorage
+
+<p>@RomMessage</p>
+<input type="file" id="fileInput" accept=".nes" @onchange="@OnFileChanged" />
+<div class="checkbox-cell"></div>
+<CheckBox UpdateToolTip="@UpdateToolTipID" Id="rememberCheckBox" @bind-Value="RememberRom">Remember ROM</CheckBox>
+
+@code {
+	[Parameter] public string RomMessage { get; set; } = "Upload Rom:";
+	[Parameter] public bool RememberRom { get; set; } = false;
+	[Parameter] public Action<string, MouseEventArgs> UpdateToolTipID { get; set; }
+
+	private byte[] _fileData;
+
+	protected override async void OnInitialized()
+	{
+		await LoadLastRom();
+		StateHasChanged();
+	}
+
+	async Task LoadLastRom()
+	{
+		string encoded = await LocalStorage.GetItemAsync<string>("file");
+		RememberRom = encoded != null && encoded.Length > 0;
+		if (RememberRom)
+		{
+			SetFileData(encoded);
+			RomMessage = "Using Remembered ROM.";
+		}
+	}
+
+	async Task OnFileChanged(ChangeEventArgs e)
+	{
+		var encoded = await JSRuntime.InvokeAsync<string>("handleFileSelect", "fileInput");
+		RomMessage = "Using Selected ROM.";
+		SetFileData(encoded);
+
+		if (RememberRom)
+		{
+			await LocalStorage.SetItemAsync("file", encoded);
+		}
+	}
+
+	void SetFileData(string encoded)
+	{
+		_fileData = Convert.FromBase64String(encoded);
+		using (var stream = new MemoryStream(_fileData))
+		{
+			FF1Rom temprom = new FF1Rom(stream);
+			if (temprom.HeaderLength != 16)
+			{
+				RomMessage = "ROM header length is incorrect, try a different ROM";
+				return;
+			}
+			try
+			{
+				temprom.AssureSafe();
+			}
+			catch (FF1Lib.FF1Rom.TournamentSafeException)
+			{
+				RomMessage = "Detected ROM hash does not match the expected hash.\nResults may vary.";
+			}
+		}
+	}
+}
