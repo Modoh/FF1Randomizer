@@ -203,6 +203,11 @@ namespace FF1Lib
 				}
 			}
 
+			if ((bool)flags.RandomChaosSprite && flags.TransformFinalFormation == FinalFormation.None)
+			{
+				RandomChaosSprite(rng);
+			}
+
 			var flippedMaps = new List<MapId>();
 
 			if ((bool)flags.FlipDungeons)

@@ -46,6 +46,7 @@
 			<TriStateCheckBox UpdateToolTip="@UpdateToolTipID" Id="LooseExcludePlacedDungeonsCheckBox" IsEnabled="@(Flags.Treasures != false)" @bind-Value="Flags.LooseExcludePlacedDungeons">No Loose Items in Incentivized Dungeons</TriStateCheckBox>
 			<TriStateCheckBox UpdateToolTip="@UpdateToolTipID" Id="noFloaterCheckBox" IsEnabled="@(Flags.MapOpenProgressionDocks == true)" @bind-Value="Flags.NoFloater">Remove Floater</TriStateCheckBox>
 			<CheckBox UpdateToolTip="@UpdateToolTipID" Id="speedboatCheckBox" @bind-Value="Flags.SpeedBoat">Faster ship</CheckBox>
+			<TriStateCheckBox UpdateToolTip="@UpdateToolTipID" Id="randomChaosSpriteCheckBox" IsEnabled="@(Flags.TransformFinalFormation == FF1Rom.FinalFormation.None)" @bind-Value="Flags.RandomChaosSprite">Random CHAOS Sprite</TriStateCheckBox>
 			<div class="checkbox-cell"></div>
 			<h4>Deep Dungeon</h4>
 			<p>Deep Dungeon should be considered extremely experimental at this time. The rest of the flags and tooltips are not properly adjusted to play nicely with it yet.</p>

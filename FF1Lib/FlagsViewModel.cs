@@ -4246,6 +4246,15 @@ namespace FF1Lib
 				RaisePropertyChanged();
 			}
 		}
+		public bool? RandomChaosSprite
+		{
+			get => Flags.RandomChaosSprite;
+			set
+			{
+				Flags.RandomChaosSprite = value;
+				RaisePropertyChanged("RandomChaosSprite");
+			}
+		}
 
 		public TreasureStackSize ExtConsumableTreasureStackSize
 		{

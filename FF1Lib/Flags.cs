@@ -305,6 +305,7 @@ namespace FF1Lib
 		public bool BugfixRender3DigitStats { get; set; } = false;
 		public SpoilerBatHints SkyWarriorSpoilerBats { get; set; } = SpoilerBatHints.Vanilla;
 		public bool? SpoilerBatsDontCheckOrbs { get; set; } = false;
+		public bool? RandomChaosSprite { get; set; } = false;
 
 		[IntegerFlag(0, 50)]
 		public int WeaponTypeBonusValue { get; set; } = 10;
