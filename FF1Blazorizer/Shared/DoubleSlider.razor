@@ -1,23 +1,26 @@
 ﻿@using Microsoft.AspNetCore.Components.Web
+@inject FF1Blazorizer.RandomizerMode RandomizerMode;
 
-@if (DoubleCol)
+@if (Standard || RandomizerMode.AdvancedEnabled)
 {
-	<BSContainer>
-		<BSRow>
-			<BSCol LG="4" Class="noleftpadding">
-				<div class="@DisabledClass @IndentClass">
-					@ChildContent
-					@if (!DisableTooltip)
-					{
-						<input type="image" src="/images/help.png" style="margin-left: 10px" class="btn-group-help" title="Show Help" @onclick="@ShowToolTip" id="@Id" />
-					}
-				</div>
-			</BSCol>
-			<BSCol LG="4">
-				<div class="@DisabledClass alloneline">@DisplayText</div>
-			</BSCol>
-			<div class="col-slider" id="rc-@Id">
-				@(new MarkupString($@"<style>
+	@if (DoubleCol)
+	{
+		<BSContainer>
+			<BSRow>
+				<BSCol LG="4" Class="noleftpadding">
+					<div class="@DisabledClass @IndentClass">
+						@ChildContent
+						@if (!DisableTooltip)
+						{
+							<input type="image" src="/images/help.png" style="margin-left: 10px" class="btn-group-help" title="Show Help" @onclick="@ShowToolTip" id="@Id" />
+						}
+					</div>
+				</BSCol>
+				<BSCol LG="4">
+					<div class="@DisabledClass alloneline">@DisplayText</div>
+				</BSCol>
+				<div class="col-slider" id="rc-@Id">
+					@(new MarkupString($@"<style>
 				#rc-{Id} > input[type='range'] {{
 					background: var(--track-background);
 					pointer-events: none;
@@ -37,32 +40,32 @@
 					background: var(--track-background);
 				}}
 			</style>"))
-				<input name="low-range" type="range" min="@MinValue" max="@MaxValue" step="@Step" @bind="@ValueLow" @bind:event="onchange" />
-				<input name="high-range" type="range" min="@MinValue" max="@MaxValue" step="@Step" @bind="@ValueHigh" @bind:event="onchange" />
-			</div>
-		</BSRow>
-	</BSContainer>
-}
-else
-{
-	<BSContainer>
-		<BSRow>
-			<BSCol LG="6" Class="noleftpadding">
-				<div class="@DisabledClass @IndentClass">
-					@ChildContent
-					@if (!DisableTooltip)
-					{
-						<input type="image" src="/images/help.png" style="margin-left: 10px" class="btn-group-help" title="Show Help" @onclick="@ShowToolTip" id="@Id" />
-					}
+					<input name="low-range" type="range" min="@MinValue" max="@MaxValue" step="@Step" @bind="@ValueLow" @bind:event="onchange" />
+					<input name="high-range" type="range" min="@MinValue" max="@MaxValue" step="@Step" @bind="@ValueHigh" @bind:event="onchange" />
 				</div>
-			</BSCol>
-			<BSCol LG="6">
-				<div class="@DisabledClass alloneline">@DisplayText</div>
-			</BSCol>
-		</BSRow>
-		<BSRow>
-			<div class="col-slider" id="rc-@Id">
-				@(new MarkupString($@"<style>
+			</BSRow>
+		</BSContainer>
+	}
+	else
+	{
+		<BSContainer>
+			<BSRow>
+				<BSCol LG="6" Class="noleftpadding">
+					<div class="@DisabledClass @IndentClass">
+						@ChildContent
+						@if (!DisableTooltip)
+						{
+							<input type="image" src="/images/help.png" style="margin-left: 10px" class="btn-group-help" title="Show Help" @onclick="@ShowToolTip" id="@Id" />
+						}
+					</div>
+				</BSCol>
+				<BSCol LG="6">
+					<div class="@DisabledClass alloneline">@DisplayText</div>
+				</BSCol>
+			</BSRow>
+			<BSRow>
+				<div class="col-slider" id="rc-@Id">
+					@(new MarkupString($@"<style>
 				#rc-{Id} > input[type='range'] {{
 					background: var(--track-background);
 					pointer-events: none;
@@ -82,163 +85,167 @@ else
 					background: var(--track-background);
 				}}
 			</style>"))
-				<input name="low-range" type="range" min="@MinValue" max="@MaxValue" step="@Step" @bind="@ValueLow" @bind:event="onchange" />
-				<input name="high-range" type="range" min="@MinValue" max="@MaxValue" step="@Step" @bind="@ValueHigh" @bind:event="onchange" />
-			</div>
-		</BSRow>
-	</BSContainer>
-}
+					<input name="low-range" type="range" min="@MinValue" max="@MaxValue" step="@Step" @bind="@ValueLow" @bind:event="onchange" />
+					<input name="high-range" type="range" min="@MinValue" max="@MaxValue" step="@Step" @bind="@ValueHigh" @bind:event="onchange" />
+				</div>
+			</BSRow>
+		</BSContainer>
+	}
 
-@code
+}
+	@code
 {
-	[Parameter]
-	public bool Indent { get; set; }
-	private string IndentClass => Indent ? "indent" : "";
+		[Parameter]
+		public bool Indent { get; set; }
+		private string IndentClass => Indent ? "indent" : "";
 
-	[Parameter]
-	public bool? IsEnabled { get; set; } = true;
-	private bool Disabled => !(IsEnabled ?? true);
-	private string DisabledClass => (IsEnabled ?? true) ? "" : "disabled";
+		[Parameter]
+		public bool Standard { get; set; } = false;
 
-	[Parameter]
-	public bool DoubleCol { get; set; }
-	[Parameter]
-	public bool ShowMedian { get; set; }
-	[Parameter]
-	public bool ShowPositiveSign { get; set; }
-	[Parameter]
-	public bool ShowPercent { get; set; }
-	[Parameter]
-	public bool DontShowPercent { get; set; }
+		[Parameter]
+		public bool? IsEnabled { get; set; } = true;
+		private bool Disabled => !(IsEnabled ?? true);
+		private string DisabledClass => (IsEnabled ?? true) ? "" : "disabled";
 
-	[Parameter]
-	public RenderFragment ChildContent { get; set; }
-	private string DisplayText => BuildDisplayString();
+		[Parameter]
+		public bool DoubleCol { get; set; }
+		[Parameter]
+		public bool ShowMedian { get; set; }
+		[Parameter]
+		public bool ShowPositiveSign { get; set; }
+		[Parameter]
+		public bool ShowPercent { get; set; }
+		[Parameter]
+		public bool DontShowPercent { get; set; }
 
-	private string BuildDisplayString()
-	{
-		string displayString = "";
-		if (_valueLow > 0 && ShowPositiveSign)
+		[Parameter]
+		public RenderFragment ChildContent { get; set; }
+		private string DisplayText => BuildDisplayString();
+
+		private string BuildDisplayString()
 		{
-			displayString += "+";
-		}
-		displayString += _valueLow;
-		if (ShowMedian && !DontShowPercent || ShowPercent)
-		{
-			displayString += "%";
-		}
-
-		displayString += " - ";
-
-		if (_valueHigh > 0 && ShowPositiveSign)
-		{
-			displayString += "+";
-		}
-		displayString += _valueHigh;
-		if (ShowMedian && !DontShowPercent)
-		{
-			displayString += "% (" + Median + "%)";
-		}
-		else if (ShowMedian && DontShowPercent)
-		{
-			displayString += " (" + Median + ")";
-		}
-		else if (ShowPercent)
-		{
-			displayString += "%";
-		}
-
-		return displayString;
-	}
-
-	private int Median
-	{
-		get
-		{
-			if (_valueLow == 0 && _valueHigh == 0) return 0;
-
-			if (_valueLow == 0 && _valueHigh == 10) return 1;
-			if (_valueLow == 0) return (int)Math.Sqrt(10 * _valueHigh);
-
-			return (int)Math.Sqrt(_valueLow * _valueHigh);
-		}
-	}
-
-	//slider fields
-	int _valueLow = 0;
-	int _valueHigh = 0;
-	[Parameter] public int MinValue { get; set; }
-	[Parameter] public int MaxValue { get; set; }
-	[Parameter] public int Step { get; set; }
-	[Parameter]
-	public int ValueLow
-	{
-		get => _valueLow;
-
-		set
-		{
-			if (_valueLow.Equals(value))
-				return;
-
-			if (value > _valueHigh)
+			string displayString = "";
+			if (_valueLow > 0 && ShowPositiveSign)
 			{
-				_valueLow = _valueHigh;
-				_valueHigh = value;
+				displayString += "+";
 			}
-			else
+			displayString += _valueLow;
+			if (ShowMedian && !DontShowPercent || ShowPercent)
 			{
-				_valueLow = value;
-			}
-			ValueLowChanged.InvokeAsync(_valueLow);
-			ValueHighChanged.InvokeAsync(_valueHigh);
-		}
-	}
-	[Parameter]
-	public int ValueHigh
-	{
-
-		get => _valueHigh;
-
-		set
-		{
-			if (_valueHigh.Equals(value))
-				return;
-
-			if (value < _valueLow)
-			{
-				_valueHigh = _valueLow;
-				_valueLow = value;
-			}
-			else
-			{
-				_valueHigh = value;
+				displayString += "%";
 			}
 
-			ValueLowChanged.InvokeAsync(_valueLow);
-			ValueHighChanged.InvokeAsync(_valueHigh);
+			displayString += " - ";
+
+			if (_valueHigh > 0 && ShowPositiveSign)
+			{
+				displayString += "+";
+			}
+			displayString += _valueHigh;
+			if (ShowMedian && !DontShowPercent)
+			{
+				displayString += "% (" + Median + "%)";
+			}
+			else if (ShowMedian && DontShowPercent)
+			{
+				displayString += " (" + Median + ")";
+			}
+			else if (ShowPercent)
+			{
+				displayString += "%";
+			}
+
+			return displayString;
 		}
 
+		private int Median
+		{
+			get
+			{
+				if (_valueLow == 0 && _valueHigh == 0) return 0;
+
+				if (_valueLow == 0 && _valueHigh == 10) return 1;
+				if (_valueLow == 0) return (int)Math.Sqrt(10 * _valueHigh);
+
+				return (int)Math.Sqrt(_valueLow * _valueHigh);
+			}
+		}
+
+		//slider fields
+		int _valueLow = 0;
+		int _valueHigh = 0;
+		[Parameter] public int MinValue { get; set; }
+		[Parameter] public int MaxValue { get; set; }
+		[Parameter] public int Step { get; set; }
+		[Parameter]
+		public int ValueLow
+		{
+			get => _valueLow;
+
+			set
+			{
+				if (_valueLow.Equals(value))
+					return;
+
+				if (value > _valueHigh)
+				{
+					_valueLow = _valueHigh;
+					_valueHigh = value;
+				}
+				else
+				{
+					_valueLow = value;
+				}
+				ValueLowChanged.InvokeAsync(_valueLow);
+				ValueHighChanged.InvokeAsync(_valueHigh);
+			}
+		}
+		[Parameter]
+		public int ValueHigh
+		{
+
+			get => _valueHigh;
+
+			set
+			{
+				if (_valueHigh.Equals(value))
+					return;
+
+				if (value < _valueLow)
+				{
+					_valueHigh = _valueLow;
+					_valueLow = value;
+				}
+				else
+				{
+					_valueHigh = value;
+				}
+
+				ValueLowChanged.InvokeAsync(_valueLow);
+				ValueHighChanged.InvokeAsync(_valueHigh);
+			}
+
+		}
+		[Parameter] public EventCallback<int> ValueLowChanged { get; set; }
+		[Parameter] public EventCallback<int> ValueHighChanged { get; set; }
+		[Parameter]
+		public string Id { get; set; }
+
+		//tooltip section
+		[Parameter]
+		public bool DisableTooltip { get; set; }
+
+		private void ShowToolTip(MouseEventArgs e)
+		{
+			UpdateToolTip?.Invoke(Id, e);
+		}
+
+		private void HideToolTip(MouseEventArgs e)
+		{
+			UpdateToolTip?.Invoke("", e);
+		}
+
+
+		[Parameter]
+		public Action<string, MouseEventArgs> UpdateToolTip { get; set; }
 	}
-	[Parameter] public EventCallback<int> ValueLowChanged { get; set; }
-	[Parameter] public EventCallback<int> ValueHighChanged { get; set; }
-	[Parameter]
-	public string Id { get; set; }
-
-	//tooltip section
-	[Parameter]
-	public bool DisableTooltip { get; set; }
-
-	private void ShowToolTip(MouseEventArgs e)
-	{
-		UpdateToolTip?.Invoke(Id, e);
-	}
-
-	private void HideToolTip(MouseEventArgs e)
-	{
-		UpdateToolTip?.Invoke("", e);
-	}
-
-
-	[Parameter]
-	public Action<string, MouseEventArgs> UpdateToolTip { get; set; }
-}

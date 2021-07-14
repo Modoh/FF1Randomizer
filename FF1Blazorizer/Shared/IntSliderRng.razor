@@ -1,55 +1,62 @@
 ﻿@using Microsoft.AspNetCore.Components.Web
+@inject FF1Blazorizer.RandomizerMode RandomizerMode;
 
-@if(DoubleCol)
+@if (Standard || RandomizerMode.AdvancedEnabled)
 {
-<BSContainer>
-	<BSRow>
-		<BSCol LG="6">
-			<span class="@DisabledClass @IndentClass">@ChildContent @RngCompatibleValue</span>
-		</BSCol>
-		<div class="col-slider">
-			<input class="@DisabledClass" type="range" value="@Value" @onchange="@onchange" min="@Min" max="@Max" step="@Step" />
-			@if (!DisableTooltip)
-			{
-				<input type="image" src="/images/help.png" class="btn-group-help" title="Show Help" @onclick="@ShowToolTip" id="@Id" />
-			}
-		</div>
-	</BSRow>
-</BSContainer>
+	@if (DoubleCol)
+	{
+		<BSContainer>
+			<BSRow>
+				<BSCol LG="6">
+					<span class="@DisabledClass @IndentClass">@ChildContent @RngCompatibleValue</span>
+				</BSCol>
+				<div class="col-slider">
+					<input class="@DisabledClass" type="range" value="@Value" @onchange="@onchange" min="@Min" max="@Max" step="@Step" />
+					@if (!DisableTooltip)
+					{
+						<input type="image" src="/images/help.png" class="btn-group-help" title="Show Help" @onclick="@ShowToolTip" id="@Id" />
+					}
+				</div>
+			</BSRow>
+		</BSContainer>
+	}
+	else
+	{
+		<BSContainer>
+			<BSRow>
+				<span class="@DisabledClass @IndentClass">@ChildContent @RngCompatibleValue</span>
+			</BSRow>
+			<BSRow>
+				<input class="@DisabledClass indent" type="range" value="@Value" @onchange="@onchange" min="@Min" max="@Max" step="@Step" />
+				@if (!DisableTooltip)
+				{
+					<input type="image" src="/images/help.png" class="btn-group-help" title="Show Help" @onclick="@ShowToolTip" id="@Id" />
+				}
+			</BSRow>
+		</BSContainer>
+	}
 }
-else
+
+
+	@code
 {
-<BSContainer>
-	<BSRow>
-		<span class="@DisabledClass @IndentClass">@ChildContent @RngCompatibleValue</span>
-	</BSRow>
-	<BSRow>
-		<input class="@DisabledClass indent" type="range" value="@Value" @onchange="@onchange" min="@Min" max="@Max" step="@Step" />
-		@if (!DisableTooltip)
+		private void ShowToolTip(MouseEventArgs e)
 		{
-			<input type="image" src="/images/help.png" class="btn-group-help" title="Show Help" @onclick="@ShowToolTip" id="@Id" />
+			UpdateToolTip?.Invoke(Id, e);
 		}
-	</BSRow>
-</BSContainer>
-}
 
+		private void HideToolTip(MouseEventArgs e)
+		{
+			UpdateToolTip?.Invoke("", e);
+		}
 
-@code
-{
-	private void ShowToolTip(MouseEventArgs e)
-	{
-		UpdateToolTip?.Invoke(Id, e);
-	}
-
-	private void HideToolTip(MouseEventArgs e)
-	{
-		UpdateToolTip?.Invoke("", e);
-	}
-
-	public string RngCompatibleValue => (Value < Max) ? Value.ToString() : "Random";
+public string RngCompatibleValue => (Value < Max) ? Value.ToString() : "Random";
 
 	[Parameter]
 	public Action<string, MouseEventArgs> UpdateToolTip { get; set; }
+
+	[Parameter]
+	public bool Standard { get; set; } = false;
 
 	[Parameter]
 	public bool Indent { get; set; }
@@ -88,4 +95,4 @@ else
 
 	[Parameter]
 	public bool DisableTooltip { get; set; }
-}
+	}

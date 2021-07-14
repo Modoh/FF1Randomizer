@@ -1,5 +1,7 @@
 ﻿@using System.Net.Http.Json
 @inject HttpClient  Http
+@inject FF1Blazorizer.RandomizerMode RandomizerMode;
+
 <div id="top-nav">
 	<div id="orbs">
 		<div class="orb-image @(litOrbs[0] ? "litUL" : "")" @onclick="@(() => SwitchOrb(0))"></div><div class="orb-image @(litOrbs[1] ? "litUR" : "")" @onclick="@(() => SwitchOrb(1))"></div><span class="orb-image @(litOrbs[2] ? "litLL" : "")" @onclick="@(() => SwitchOrb(2))"></span><span class="orb-image @(litOrbs[3] ? "litLR" : "")" @onclick="@(() => SwitchOrb(3))"></span>
@@ -12,13 +14,17 @@
 		<span class="nav-item-main" id="help"><a href="WhatsNew">What's New</a></span>
 		<span class="nav-item-main" id="issues"><a href="https://github.com/FiendsOfTheElements/FF1Randomizer/issues">Issues</a></span>
 		<span class="nav-item-main" id="install"><a href="javascript:showPWAInstall()">Install</a></span>
+		<span class="nav-item-main" id="advanced"><a href="#" @onclick="(() => ToggleMode())">@modeSelected</a></span>
 	</nav>
 </div>
 
 @code {
 	[Parameter] public EventCallback<bool> ChaosTriggered { get; set; }
+	[Parameter] public EventCallback<bool> ModeSwitched { get; set; }
 
 	private bool[] litOrbs = { false, false, false, false };
+
+	public string modeSelected = "Advanced";
 
 	private List<int> orbOrder = new List<int>();
 
@@ -41,4 +47,16 @@
 		return ChaosTriggered.InvokeAsync(true);
 	}
 
+	private Task ToggleMode()
+	{
+		if (RandomizerMode.AdvancedEnabled)
+		{
+			modeSelected = "Advanced";
+		}
+		else
+		{
+			modeSelected = "Simple";
+		}
+		return ModeSwitched.InvokeAsync(true);
+	}
 }

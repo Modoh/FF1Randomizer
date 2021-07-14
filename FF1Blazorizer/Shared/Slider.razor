@@ -1,21 +1,28 @@
-﻿<input type="range" value="@Value" @onchange="@onchange" min="@Min" max="@Max" step="@Step" />
+﻿@inject FF1Blazorizer.RandomizerMode RandomizerMode;
 
-@code
+@if (Standard || RandomizerMode.AdvancedEnabled)
 {
-	[Parameter]
-	public double Value { get; set; }
-	[Parameter]
-	public EventCallback<double> ValueChanged { get; set; }
-	void onchange(ChangeEventArgs e)
-	{
-		Value = double.Parse((string)e.Value);
-		ValueChanged.InvokeAsync(Value);
-	}
-
-	[Parameter]
-	public double Min { get; set; }
-	[Parameter]
-	public double Max { get; set; }
-	[Parameter]
-	public double Step { get; set; }
+	<input type="range" value="@Value" @onchange="@onchange" min="@Min" max="@Max" step="@Step" />
 }
+
+	@code
+{
+		[Parameter]
+		public double Value { get; set; }
+		[Parameter]
+		public bool Standard { get; set; } = false;
+		[Parameter]
+		public EventCallback<double> ValueChanged { get; set; }
+		void onchange(ChangeEventArgs e)
+		{
+			Value = double.Parse((string)e.Value);
+			ValueChanged.InvokeAsync(Value);
+		}
+
+		[Parameter]
+		public double Min { get; set; }
+		[Parameter]
+		public double Max { get; set; }
+		[Parameter]
+		public double Step { get; set; }
+	}

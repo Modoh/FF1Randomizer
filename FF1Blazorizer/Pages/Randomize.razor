@@ -3,6 +3,7 @@
 @using FF1Lib;
 @using Microsoft.AspNetCore.Components.Web
 @inject Blazored.LocalStorage.ILocalStorageService LocalStorage
+@inject FF1Blazorizer.RandomizerMode RandomizerMode
 
 <div id="main-content">
 	<ToolTip @ref="ToolTipElement" ToolTipId="@ToolTipId" />
@@ -11,7 +12,7 @@
 		{
 			<AnnouncementBox SetHideAnnouncement="@SetHideAnnouncement" />
 		}
-		<FileTab Flags="@Flags" StatusMessage="@StatusMessage" SetStatusMessage="@SetStatusMessage" UpdateToolTipID="@UpdateToolTipID" showChaos="@showChaos" />
+		<FileTab Flags="@Flags" StatusMessage="@StatusMessage" SetStatusMessage="@SetStatusMessage" UpdateToolTipID="@UpdateToolTipID" showChaos="@showChaos"/>
 		<FunTab Flags="@Flags" UpdateToolTipID="@UpdateToolTipID" SetStatusMessage="@SetStatusMessage" />
 	</aside>
 
@@ -35,7 +36,10 @@
 			<ClassesTab Flags="@Flags" UpdateToolTipID="@UpdateToolTipID" noTabLayout="@noTabLayout" />
 			<ItemEquipmentTab Flags="@Flags" UpdateToolTipID="@UpdateToolTipID" noTabLayout="@noTabLayout" />
 			<AdjustmentsTab Flags="@Flags" UpdateToolTipID="@UpdateToolTipID" noTabLayout="@noTabLayout" />
-			<ExperimentalTab Flags="@Flags" UpdateToolTipID="@UpdateToolTipID" noTabLayout="@noTabLayout" />
+			@if (RandomizerMode.AdvancedEnabled)
+			{
+				<ExperimentalTab Flags="@Flags" UpdateToolTipID="@UpdateToolTipID" noTabLayout="@noTabLayout" />
+			}
 			<ExpandArrow noTabLayout="@noTabLayout" SetTabLayout="@SetTabLayout" />
 		}
 		else
@@ -115,13 +119,16 @@
 								<AdjustmentsTab Flags="@Flags" UpdateToolTipID="@UpdateToolTipID" noTabLayout="@noTabLayout" />
 							</BSTabContent>
 						</BSTab>
-						<BSTab>
-							<BSTabLabel>Beta</BSTabLabel>
-							<BSTabContent>
-								<ExperimentalTab Flags="@Flags" UpdateToolTipID="@UpdateToolTipID" noTabLayout="@noTabLayout" />
-							</BSTabContent>
-						</BSTab>
-					</BSTabList>
+						@if (RandomizerMode.AdvancedEnabled)
+						{
+							<BSTab>
+								<BSTabLabel>Beta</BSTabLabel>
+								<BSTabContent>
+									<ExperimentalTab Flags="@Flags" UpdateToolTipID="@UpdateToolTipID" noTabLayout="@noTabLayout" />
+								</BSTabContent>
+							</BSTab>
+						}
+						</BSTabList>
 				</div>
 				<BSTabSelectedContent />
 			</BSTabGroup>
@@ -132,17 +139,8 @@
 
 @code {
 
-	[CascadingParameter] public bool showChaos { get; set; }
-	//[Parameter] public bool showChaos { get; set; } = false;
-
-	//private bool showChaos { get; set; }
-
-	//void ShowChaos()
-	//{
-	//	showChaos = true;
-	//	StateHasChanged();
-	//}
-
+	[CascadingParameter(Name = "showChaos")] public bool showChaos { get; set; }
+	[CascadingParameter(Name = "advancedMode")] public bool advancedMode { get; set; }
 
 	private FlagsViewModel Flags { get; set; } = new FlagsViewModel();
 	private string ToolTipId = "unupdated";
@@ -202,6 +200,12 @@
 	void SetTabLayout(bool notab)
 	{
 		noTabLayout = notab;
+		StateHasChanged();
+	}
+
+	void ToggleMode()
+	{
+		RandomizerMode.Toggle();
 		StateHasChanged();
 	}
 

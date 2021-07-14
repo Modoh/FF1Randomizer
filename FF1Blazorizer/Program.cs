@@ -23,8 +23,30 @@ namespace FF1Blazorizer
             builder.Services.AddTransient(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 			builder.Services.AddBootstrapCss();
 			builder.Services.AddBlazoredLocalStorage();
+			builder.Services.AddScoped<RandomizerMode>();
 
             await builder.Build().RunAsync();
         }
-    }
+	}
+
+	public class RandomizerMode
+	{
+		public bool AdvancedEnabled { get; set; }
+		public event Action OnChange;
+
+		public void SetMode(bool enableadvanced)
+		{
+			AdvancedEnabled = enableadvanced;
+			NotifyStateChanged();
+		}
+		public void Toggle()
+		{
+			AdvancedEnabled = !AdvancedEnabled;
+			NotifyStateChanged();
+		}
+		private void NotifyStateChanged()
+		{
+			OnChange?.Invoke();
+		}
+	}
 }

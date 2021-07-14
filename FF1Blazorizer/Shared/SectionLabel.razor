@@ -1,0 +1,16 @@
+﻿@inject FF1Blazorizer.RandomizerMode RandomizerMode
+
+@if (Standard || RandomizerMode.AdvancedEnabled)
+{
+	<h4>@ChildContent</h4>
+}
+
+
+@code
+{
+	[Parameter]
+	public bool Standard { get; set; } = false;
+
+	[Parameter]
+	public RenderFragment ChildContent { get; set; }
+}
