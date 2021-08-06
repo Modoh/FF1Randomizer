@@ -670,7 +670,7 @@ namespace FF1Lib
 		{
 			// Inline edit to draw the isthmus or the bridge, but never the open canal anymore.
 			// See 0F_8780_IsOnEitherBridge for this and the IsOnBridge replacement called from below.
-			Put(0x7E3B8, Blob.FromHex("20CEE3AE0D60AC0E6020DFE3B0DFA908AE0C60F0010A"));
+			Put(0x7E3BB, Blob.FromHex("A266A0A420DFE3B0E1A908AE0C60F002A910"));
 
 			/**
 			 *  A slight wrinkle from normal cross page jump in that we need to preserve the status register,
@@ -1113,18 +1113,18 @@ namespace FF1Lib
 		{
 			var crescentSages = new List<ObjectId> { ObjectId.CrescentSage2, ObjectId.CrescentSage3, ObjectId.CrescentSage4, ObjectId.CrescentSage5, ObjectId.CrescentSage6, ObjectId.CrescentSage7, ObjectId.CrescentSage8, ObjectId.CrescentSage9, ObjectId.CrescentSage10 };
 			var keyNpc = new List<TargetNpc> {
-				new TargetNpc(ObjectId.Princess1, MapId.ConeriaCastle2F, (0x0D, 0x05), true, true, "I won't rest until\nthe Princess is rescued!\n\n..What? Me?"),
-				new TargetNpc(ObjectId.Matoya, MapId.MatoyasCave, (0x06,0x03), true, false, "I'm Matoya's apprentice!\n..She only needs me for\nreading her grimoires."),
+				//new TargetNpc(ObjectId.Princess1, MapId.ConeriaCastle2F, (0x0D, 0x05), true, true, "I won't rest until\nthe Princess is rescued!\n\n..What? Me?"),
+				//new TargetNpc(ObjectId.Matoya, MapId.MatoyasCave, (0x06,0x03), true, false, "I'm Matoya's apprentice!\n..She only needs me for\nreading her grimoires."),
 				new TargetNpc(ObjectId.Bikke, MapId.Pravoka, (0,0), false, true, "It is an evil voyage.\nIf Captain Bikke has his\nway, I will never see\nhome again.\n\nYet I do not fear Kraken.\nI fear the wrath of God."),
-				new TargetNpc(ObjectId.ElfDoc, MapId.ElflandCastle, (0x07, 0x05), true, false, "I swore to find a cure\nfor the Prince's curse.\nIf only I could find\nthat elusive Astos.."),
+				//new TargetNpc(ObjectId.ElfDoc, MapId.ElflandCastle, (0x07, 0x05), true, false, "I swore to find a cure\nfor the Prince's curse.\nIf only I could find\nthat elusive Astos.."),
 				new TargetNpc(ObjectId.Astos, MapId.NorthwestCastle, (0x11,0x07), true, true, "While the Crown is\nmissing, I can attest\nthat this is indeed\nthe REAL King of\nNorthwest Castle."),
-				new TargetNpc(ObjectId.Unne, MapId.Melmond, (0x1D, 0x02), false, true, "I'm also trying\nto discover the secret\nof Lefeinish!"),
-				new TargetNpc(ObjectId.Unne, MapId.Lefein, (0,0), false, false, "Lu..pa..?\nLu..pa..?"),
+				//new TargetNpc(ObjectId.Unne, MapId.Melmond, (0x1D, 0x02), false, true, "I'm also trying\nto discover the secret\nof Lefeinish!"),
+				//new TargetNpc(ObjectId.Unne, MapId.Lefein, (0,0), false, false, "Lu..pa..?\nLu..pa..?"),
 				new TargetNpc(ObjectId.Vampire, MapId.SardasCave, (0x04, 0x02), true, true, "The Vampire put a curse\non me, it will only be\nlifted on his death.\nAnd I can't do anything\nwhile you fight.\nIt's a shame."),
-				new TargetNpc(ObjectId.CanoeSage, MapId.CrescentLake, (0,0), false, true, "I came here to learn\neverything about the\nFiend of Earth. You got\nto respect such a\ndangerous adversary."),
-				new TargetNpc(ObjectId.Fairy, MapId.Gaia, (0x2F, 0x14), false, true, "I'm trying to get\nwhat's at the bottom\nof the pond.\n\nMaybe if I drained it.."),
-				new TargetNpc(ObjectId.Smith, MapId.DwarfCave, (0x08, 0x02), true, false, "I'm sure it will be a\nbadass sword! Like with\na huge blade, and a gun\nas the hilt, and you can\ntrigger it..\nI can't wait!"),
-				new TargetNpc(ObjectId.Nerrick, MapId.DwarfCave, (0x0F, 0x2D), false, true, "Digging a canal is hard\nbut honest work.\n\n..Can't wait to be done\nwith it."),
+				//new TargetNpc(ObjectId.CanoeSage, MapId.CrescentLake, (0,0), false, true, "I came here to learn\neverything about the\nFiend of Earth. You got\nto respect such a\ndangerous adversary."),
+				//new TargetNpc(ObjectId.Fairy, MapId.Gaia, (0x2F, 0x14), false, true, "I'm trying to get\nwhat's at the bottom\nof the pond.\n\nMaybe if I drained it.."),
+				//new TargetNpc(ObjectId.Smith, MapId.DwarfCave, (0x08, 0x02), true, false, "I'm sure it will be a\nbadass sword! Like with\na huge blade, and a gun\nas the hilt, and you can\ntrigger it..\nI can't wait!"),
+				//new TargetNpc(ObjectId.Nerrick, MapId.DwarfCave, (0x0F, 0x2D), false, true, "Digging a canal is hard\nbut honest work.\n\n..Can't wait to be done\nwith it."),
 			};
 
 			var eventNpc = new List<(ObjectId, MapId)> { (ObjectId.ElflandCastleElf3, MapId.ElflandCastle), (ObjectId.MelmondMan1, MapId.Melmond), (ObjectId.MelmondMan3, MapId.Melmond), (ObjectId.MelmondMan4, MapId.Melmond), (ObjectId.MelmondMan8, MapId.Melmond), (ObjectId.DwarfcaveDwarf6, MapId.DwarfCave), (ObjectId.ConeriaCastle1FWoman2, MapId.ConeriaCastle1F), (ObjectId.ElflandElf2, MapId.Elfland), (ObjectId.ElflandElf5, MapId.Elfland) };
@@ -1164,12 +1164,19 @@ namespace FF1Lib
 			PutInBank(0x1F, 0xCA4E, Blob.FromHex("EAEAEAEA")); // Don't zero out joy_select
 
 			// New talk routine to add class
-			var talk_class = talkroutines.Add(Blob.FromHex("A470F005207990903DA571203D9620A49FC000D02BA5739D0061A9009D26619D01619D0B619D0D6120649F20509FA00E207990900320C59520879FA4762073922018964C4396A57260"));
-
+			if (!(bool)flags.ClassAsNpcDualClass) 
+			{
+				var talk_class = talkroutines.Add(Blob.FromHex("A470F005207990903DA571203D9620A49FC000D02BA5739D0061A9009D26619D01619D0B619D0D6120649F20509FA00E207990900320C59520879FA4762073922018964C4396A57260"));
+			}
+			else // same routine but doesn't clear stats/equipment/magic (dual classing)
+			{
+				var talk_class = talkroutines.Add(Blob.FromHex("A470F005207990903DA571203D9620A49FC000D032BC0061A5739D0061C0FFD014A9009D26619D01619D0B619D0D6120649F20509FA00E207990900320C59520879FA4762073922018964C4396A57260"));
+			}
+			
 			// Routines to switch the class (clear stats, equipment, new stats, levelup)
 			PutInBank(newTalkRoutinesBank, 0x9F50, Blob.FromHex("A91148A9FE48A90648A9C748A98248A9004C03FEA0188610A9618511B110297F9110C8C020D0F5A000A9638511A9009110C8C02FD0F960A91148A9FE48A90648A98748A9A9488A4A4A4A4A4A4A8510A91B4C03FEA91148A9FE48A90648A99948A91048A9008565A90E4C03FE"));
 
-			var totalKeyNPC = (bool)flags.ClassAsNpcKeyNPC ? Math.Min(flags.ClassAsNpcCount, 12) : 0;
+			var totalKeyNPC = (bool)flags.ClassAsNpcKeyNPC ? Math.Min(flags.ClassAsNpcCount, 3) : 0;
 			var totalAllNPC = ((bool)flags.ClassAsNpcFiends ? 4 : 0) + totalKeyNPC;
 
 			// Select promoted or base classes list

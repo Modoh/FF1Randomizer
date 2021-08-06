@@ -2454,6 +2454,15 @@ namespace FF1Lib
 				PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ClassAsNpcPromotion"));
 			}
 		}
+		public bool? ClassAsNpcDualClass
+		{
+			get => Flags.ClassAsNpcDualClass;
+			set
+			{
+				Flags.ClassAsNpcDualClass = value;
+				PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("ClassAsNpcDualClass"));
+			}
+		}
 		public ProgressiveScaleMode ProgressiveScaleMode
 		{
 			get => Flags.ProgressiveScaleMode;

@@ -1,4 +1,4 @@
-;; Last Update : 2021-01-22
+;; Last Update : 2021-08-05
 
 unsram 		= $6000
 ch_stats        = unsram + $0100  ; MUST be on page bound.  Each character allowed $40 bytes, so use 00,40,80,C0 to index ch_stats
@@ -44,7 +44,55 @@ LineupMenu_ProcessJoy = $9A14              ; Bank $0E
 
  .ORG $9520 ; In bank 11
 
-;; Talk routine to switch a party member with a new class
+;; Talk routine to switch a party member with a new class - dual class version
+;;  [0] NPC requirement
+;;  [1] Dialog when requirement met
+;;  [2] Dialog when requirement isn't met
+;;  [3] ID of the class to change to
+Talk_Class:
+  LDY talkarray                ; Check if there's a requirement (Event)
+  BEQ NoFlag                   ; If so...
+    JSR CheckGameEventFlag     ; Check if the flag is set
+    BCC NotSet
+NoFlag:
+  LDA talkarray+1
+  JSR InTalkDialogueBox        ; Show joining dialogue
+  JSR EnterLineupMenu_L        ;  and go to lineup menu
+  CPY #$00
+  BNE CancelChoice  ; Check Y if choice was canceled
+	LDY ch_class, X				 ; Grab old class to check for None later
+    LDA talkarray+3              ; Change the class ID
+    STA ch_class, X
+    CPY #$FF					 ; Keep stats if class isn't None
+	BNE KeepStats
+	LDA #$00                     ; Zero out level, ailments and HP
+    STA ch_level, X
+    STA ch_ailments, X
+    STA ch_curhp+1, X
+    STA ch_maxhp+1, X
+    JSR ResetStats               ; Unequip equipment and remove spells and MP
+	JSR LoadStats                ; Load starting stats
+KeepStats:
+    LDY #OBJID_BAHAMUT           ; Check if the party already class changed
+    JSR CheckGameEventFlag       ; If so, promote this character
+    BCC SkipClassChange
+      JSR DoClassChangeOne
+SkipClassChange:      
+    JSR LevelUp                  ; Level Up to the replaced character level
+    LDY talkarray+6              ; And hide this NPC
+    JSR HideMapObject
+CancelChoice:
+    JSR InTalkReenterMap         ; Reenter map
+    JMP SkipDialogueBox          ; Don't show dialogue
+NotSet:
+  LDA talkarray+2              ; Default dialogue
+  RTS
+
+  
+  
+  .ORG $9520 ; In bank 11
+
+;; Talk routine to switch a party member with a new class - original version
 ;;  [0] NPC requirement
 ;;  [1] Dialog when requirement met
 ;;  [2] Dialog when requirement isn't met

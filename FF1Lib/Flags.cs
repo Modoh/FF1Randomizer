@@ -386,6 +386,7 @@ namespace FF1Lib
 
 		public bool? NoMasamune { get; set; } = false;
 		public bool? NoXcalber { get; set; } = false;
+		
 		public bool? ClassAsNpcFiends { get; set; } = false;
 		public bool? ClassAsNpcKeyNPC { get; set; } = false;
 
@@ -394,6 +395,7 @@ namespace FF1Lib
 		public bool? ClassAsNpcDuplicate { get; set; } = false;
 		public bool? ClassAsNpcForcedFiends { get; set; } = false;
 		public bool? ClassAsNpcPromotion { get; set; } = false;
+		public bool? ClassAsNpcDualClass { get; set; } = false;
 
 		[IntegerFlag(0, 500, 10)]
 		public int BossScaleStatsLow { get; set; } = 50;
